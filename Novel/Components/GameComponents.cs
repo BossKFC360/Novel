@@ -8,26 +8,13 @@ namespace Novel.Components
     {
         public string Name { get; set; }
         public int Value { get; set; }
-
-        public Point(string name)
-        {
-            Name = name;
-            Value = 0;
-        }
-
+        public Point(string name) { Name = name; Value = 0; }
         public void Add(int amount) => Value += amount;
         public void Sub(int amount) => Value -= amount;
     }
 
-    public class Attr : Point
-    {
-        public Attr(string name) : base(name) { }
-    }
-
-    public class Ending : Point
-    {
-        public Ending(string name) : base(name) { }
-    }
+    public class Attr : Point { public Attr(string name) : base(name) { } }
+    public class Ending : Point { public Ending(string name) : base(name) { } }
 
     public class Player
     {
@@ -38,22 +25,8 @@ namespace Novel.Components
 
         public Player()
         {
-            Attrs.AddRange(new[]
-            {
-                new Attr("Сила"),
-                new Attr("Интеллект"),
-                new Attr("Харизма"),
-                new Attr("Рассудок"),
-                new Attr("Смелость")
-            });
-
-            Endings.AddRange(new[]
-            {
-                new Ending("Good"),
-                new Ending("Neutral"),
-                new Ending("Bad"),
-                new Ending("Secret")
-            });
+            Attrs.AddRange(new[] { new Attr("Сила"), new Attr("Интеллект"), new Attr("Харизма"), new Attr("Рассудок"), new Attr("Смелость") });
+            Endings.AddRange(new[] { new Ending("Good"), new Ending("Neutral"), new Ending("Bad"), new Ending("Secret") });
         }
 
         public Attr GetAttr(string name) => Attrs.First(a => a.Name == name);
@@ -66,7 +39,7 @@ namespace Novel.Components
             int b = GetEnding("Bad").Value;
             int s = GetEnding("Secret").Value;
 
-            if (s >= g && s >= n && s >= b && s > 0) return "Secret";
+            if (s > 0 && s >= g && s >= n && s >= b) return "Secret";
             if (g >= n && g >= b) return "Good";
             if (n >= b) return "Neutral";
             return "Bad";
@@ -108,27 +81,13 @@ namespace Novel.Components
         public string Speaker { get; set; }
         public string Text { get; set; }
         public List<Choice> Choices { get; set; } = new();
+        public Action<Player> MiniGame { get; set; }
         public bool IsEnding { get; set; }
 
-        public Step(string id, string speaker, string text)
-        {
-            Id = id;
-            Speaker = speaker;
-            Text = text;
-            Choices = new List<Choice>();
-        }
-
-        public Step(string id, List<Choice> choices)
-        {
-            Id = id;
-            Choices = choices;
-        }
-
-        public Step(string id, bool isEnding)
-        {
-            Id = id;
-            IsEnding = isEnding;
-        }
+        public Step(string id, string speaker, string text) { Id = id; Speaker = speaker; Text = text; }
+        public Step(string id, List<Choice> choices) { Id = id; Choices = choices; }
+        public Step(string id, Action<Player> miniGame) { Id = id; MiniGame = miniGame; }
+        public Step(string id, bool isEnding) { Id = id; IsEnding = isEnding; }
     }
 
     public class Chapter
@@ -137,25 +96,11 @@ namespace Novel.Components
         public string Title { get; set; }
         public List<Step> Steps { get; set; } = new();
 
-        public Chapter(string id, string title)
-        {
-            Id = id;
-            Title = title;
-        }
+        public Chapter(string id, string title) { Id = id; Title = title; }
 
-        public void AddDialog(string stepId, string speaker, string text)
-        {
-            Steps.Add(new Step(stepId, speaker, text));
-        }
-
-        public void AddChoice(string stepId, List<Choice> choices)
-        {
-            Steps.Add(new Step(stepId, choices));
-        }
-
-        public void AddEnding(string stepId)
-        {
-            Steps.Add(new Step(stepId, true));
-        }
+        public void AddDialog(string stepId, string speaker, string text) => Steps.Add(new Step(stepId, speaker, text));
+        public void AddChoice(string stepId, List<Choice> choices) => Steps.Add(new Step(stepId, choices));
+        public void AddMiniGame(string stepId, Action<Player> miniGame) => Steps.Add(new Step(stepId, miniGame));
+        public void AddEnding(string stepId) => Steps.Add(new Step(stepId, true));
     }
 }

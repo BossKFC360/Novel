@@ -46,8 +46,7 @@ namespace Novel.Game
         {
             FastMode = !FastMode;
             Console.ForegroundColor = ConsoleColor.Yellow;
-            string message = FastMode ? "[УСКОРЕНИЕ ВКЛЮЧЕНО]" : "[УСКОРЕНИЕ ВЫКЛЮЧЕНО]";
-            Console.WriteLine(message);
+            Console.WriteLine(FastMode ? "[УСКОРЕНИЕ ВКЛЮЧЕНО]" : "[УСКОРЕНИЕ ВЫКЛЮЧЕНО]");
             Console.ResetColor();
             Thread.Sleep(300);
         }
@@ -56,8 +55,7 @@ namespace Novel.Game
         {
             SkipMode = !SkipMode;
             Console.ForegroundColor = ConsoleColor.Yellow;
-            string message = SkipMode ? "[ПРОПУСК ВКЛЮЧЕН]" : "[ПРОПУСК ВЫКЛЮЧЕН]";
-            Console.WriteLine(message);
+            Console.WriteLine(SkipMode ? "[ПРОПУСК ВКЛЮЧЕН]" : "[ПРОПУСК ВЫКЛЮЧЕН]");
             Console.ResetColor();
             Thread.Sleep(300);
         }
